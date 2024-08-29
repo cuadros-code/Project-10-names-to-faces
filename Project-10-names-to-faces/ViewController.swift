@@ -35,7 +35,19 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
         ) as? PersonCell else {
             fatalError("Cell not found")
         }
-        return cell 
+        
+        let person = people[indexPath.item]
+        let imagePath = getDocumentsDirectory().appendingPathComponent(person.image)
+        
+        cell.name.text = person.name
+        cell.imageView.image = UIImage(contentsOfFile: imagePath.path)
+        
+        cell.imageView.layer.borderColor = UIColor(white: 0, alpha: 0.3).cgColor
+        cell.imageView.layer.borderWidth = 2
+        cell.imageView.layer.cornerRadius = 3
+        cell.layer.cornerRadius = 7
+        
+        return cell
     }
     
     @objc func addNewPerson(){
