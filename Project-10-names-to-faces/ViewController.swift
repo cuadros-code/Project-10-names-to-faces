@@ -20,9 +20,7 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
             target: self,
             action: #selector(addNewPerson)
         )
-        
     }
-    
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return people.count
@@ -60,18 +58,43 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let person = people[indexPath.item]
         
+        let alertAction = UIAlertController(
+            title: "Actions",
+            message: "Select one action",
+            preferredStyle: .actionSheet
+        )
+        
+        alertAction.addAction(UIAlertAction(title: "Edit", style: .default) { [weak self] _ in
+            self?.changeName(person: person)
+        })
+        
+        let deleteAction = UIAlertAction(title: "Delete", style: .default) { [weak self] _ in
+            self?.people.remove(at: indexPath.item)
+            self?.collectionView.reloadData()
+        }
+        deleteAction.setValue(UIColor.red, forKey: "titleTextColor")
+
+        alertAction.addAction(deleteAction)
+        
+        alertAction.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+    
+        present(alertAction, animated: true)
+    
+    }
+    
+    func changeName(person: Person){
         let ac = UIAlertController(title: "Change name", message: nil, preferredStyle: .alert)
         ac.addTextField()
         ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        
+
         let submitAction = UIAlertAction(title: "Submit", style: .default) { [weak self, weak ac] _ in
             guard let newName = ac?.textFields?[0].text else { return }
             person.name = newName
-            
+
             self?.collectionView.reloadData()
         }
         ac.addAction(submitAction)
-        
+
         present(ac, animated: true)
     }
     
