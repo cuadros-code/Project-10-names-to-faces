@@ -51,8 +51,14 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
     @objc func addNewPerson(){
         let picker = UIImagePickerController()
         picker.allowsEditing = true
-        picker.delegate = self
-        present(picker, animated: true)
+        
+        // validate access camera user
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            picker.sourceType = .camera
+            picker.delegate = self
+            present(picker, animated: true)
+        }
+        
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
